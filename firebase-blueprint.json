@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "GuestbookEntry": {
+      "title": "GuestbookEntry",
+      "description": "A congratulatory wedding guestbook message written by a wedding guest.",
+      "type": "object",
+      "properties": {
+        "authorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "description": "Display name of the guest leaving a congratulatory message."
+        },
+        "side": {
+          "type": "string",
+          "enum": ["groom", "bride", "friend"],
+          "description": "Whether the guest is from the groom side, bride side, or a mutual friend."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Congratulatory wedding message body."
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Whether the guestbook message is visible on the wedding invitation."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the guestbook message was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the guestbook message was last updated."
+        }
+      },
+      "required": [
+        "authorName",
+        "side",
+        "message",
+        "isPublic",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Marker document identifying a wedding host administrator.",
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["admin"],
+          "description": "Administrator role marker."
+        }
+      },
+      "required": ["role"]
+    }
+  },
+  "firestore": {
+    "/guestbookEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/GuestbookEntry" },
+      "description": "Publicly readable and guest-creatable wedding guestbook entries with admin moderation."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Server-managed administrator role records."
+    }
+  }
+}

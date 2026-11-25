@@ -1,0 +1,92 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'gibeom.park98@gmail.com'
+      );
+    }
+
+    function isValidGuestbookEntry(data) {
+      return data.keys().hasAll([
+          'authorName',
+          'side',
+          'message',
+          'isPublic',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'authorName',
+          'side',
+          'message',
+          'isPublic',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.authorName is string &&
+        data.authorName.size() >= 1 &&
+        data.authorName.size() <= 30 &&
+        data.side in ['groom', 'bride', 'friend'] &&
+        data.message is string &&
+        data.message.size() >= 1 &&
+        data.message.size() <= 300 &&
+        data.isPublic is bool &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    match /admins/{adminId} {
+      allow get: if isVerifiedUser() && isValidId(adminId) && request.auth.uid == adminId;
+      allow list, create, update, delete: if false;
+    }
+
+    match /guestbookEntries/{entryId} {
+      allow get: if isValidId(entryId) && (
+        existing().isPublic == true ||
+        isAdmin()
+      );
+
+      allow list: if existing().isPublic == true || isAdmin();
+
+      allow create: if isValidId(entryId) &&
+        isValidGuestbookEntry(incoming()) &&
+        incoming().isPublic == true &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isValidId(entryId) &&
+        isValidGuestbookEntry(incoming()) &&
+        isAdmin();
+
+      allow delete: if isValidId(entryId) && isAdmin();
+    }
+  }
+}

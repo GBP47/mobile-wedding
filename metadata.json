@@ -1,0 +1,6 @@
+{
+  "name": "서진 & 지은 모바일 청첩장",
+  "description": "박서진과 김지은의 결혼식에 초대합니다. 예식 정보, 오시는 길 지도, 방명록을 담은 심플한 모바일 청첩장입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
