@@ -35,7 +35,7 @@ export type KakaoShareOutcome = 'kakao-sdk' | 'web-share' | 'copied' | 'failed';
 export async function shareWeddingToKakao(): Promise<KakaoShareOutcome> {
   const pageUrl = window.location.href;
   const kakaoKey = import.meta.env.VITE_KAKAO_JS_KEY as string | undefined;
-  const imageUrl = new URL(WEDDING_DATA.photos[0].src, window.location.origin).href;
+  const imageUrl = new URL(WEDDING_DATA.photos[0].src, pageUrl).href;
 
   if (kakaoKey && window.Kakao) {
     try {

@@ -1,3 +1,8 @@
+import heroCoverImg from '../assets/images/hero_bw_couple_1795611964775.jpg';
+import galleryWalkImg from '../assets/images/gallery_bw_walk_1795611964110.jpg';
+import galleryHandsImg from '../assets/images/gallery_bw_hands_1795611964457.jpg';
+import galleryRingsImg from '../assets/images/gallery_bw_rings_1795611964872.jpg';
+
 export interface AccountInfo {
   side: 'groom' | 'bride';
   roleLabel: string;
@@ -54,7 +59,7 @@ export const WEDDING_DATA = {
     hall: '2층 아이리스홀',
     fullName: '밀리토피아호텔 웨딩센터 2층 아이리스홀',
     address: '경기도 성남시 수정구 위례대로 83',
-    mapImage: '/assets/aistudio/____________-2_10852b9f.jpg',
+    mapImage: `${import.meta.env.BASE_URL}assets/aistudio/____________-2_10852b9f.jpg`,
     naverMapUrl:
       'https://map.naver.com/p/search/' +
       encodeURIComponent('경기도 성남시 수정구 위례대로 83 밀리토피아호텔 웨딩센터'),
@@ -65,25 +70,25 @@ export const WEDDING_DATA = {
   photos: [
     {
       id: 'cover',
-      src: '/src/assets/images/hero_bw_couple_1795611964775.jpg',
+      src: heroCoverImg,
       alt: '창가 앞에 나란히 선 박서진과 김지은',
       caption: '2027. 04. 24',
     },
     {
       id: 'walk',
-      src: '/src/assets/images/gallery_bw_walk_1795611964110.jpg',
+      src: galleryWalkImg,
       alt: '돌담길을 함께 걷는 박서진과 김지은',
       caption: '박서진 · 김지은',
     },
     {
       id: 'hands',
-      src: '/src/assets/images/gallery_bw_hands_1795611964457.jpg',
+      src: galleryHandsImg,
       alt: '손을 맞잡은 두 사람과 부케',
       caption: '2027년 4월 24일',
     },
     {
       id: 'rings',
-      src: '/src/assets/images/gallery_bw_rings_1795611964872.jpg',
+      src: galleryRingsImg,
       alt: '두 사람의 결혼반지와 흰 꽃',
       caption: '밀리토피아호텔 웨딩센터 2층 아이리스홀',
     },
